@@ -7,7 +7,157 @@
 *
 * 🟢 You can import this file directly.
 */
+export const OrganizationRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER',
+  VIEWER: 'VIEWER'
+} as const
+
+export type OrganizationRole = (typeof OrganizationRole)[keyof typeof OrganizationRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ApiStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  DEPRECATED: 'DEPRECATED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ApiStatus = (typeof ApiStatus)[keyof typeof ApiStatus]
+
+
+export const ApiVisibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
+  INTERNAL: 'INTERNAL'
+} as const
+
+export type ApiVisibility = (typeof ApiVisibility)[keyof typeof ApiVisibility]
+
+
+export const HttpMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+  HEAD: 'HEAD',
+  OPTIONS: 'OPTIONS',
+  TRACE: 'TRACE'
+} as const
+
+export type HttpMethod = (typeof HttpMethod)[keyof typeof HttpMethod]
+
+
+export const DocumentationType = {
+  OVERVIEW: 'OVERVIEW',
+  GETTING_STARTED: 'GETTING_STARTED',
+  AUTHENTICATION: 'AUTHENTICATION',
+  ENDPOINTS: 'ENDPOINTS',
+  EXAMPLES: 'EXAMPLES',
+  SDK: 'SDK',
+  CHANGELOG: 'CHANGELOG',
+  FAQ: 'FAQ',
+  TROUBLESHOOTING: 'TROUBLESHOOTING',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type DocumentationType = (typeof DocumentationType)[keyof typeof DocumentationType]
+
+
+export const LoadBalancingType = {
+  ROUND_ROBIN: 'ROUND_ROBIN',
+  LEAST_CONNECTIONS: 'LEAST_CONNECTIONS',
+  WEIGHTED_ROUND_ROBIN: 'WEIGHTED_ROUND_ROBIN',
+  IP_HASH: 'IP_HASH',
+  RANDOM: 'RANDOM'
+} as const
+
+export type LoadBalancingType = (typeof LoadBalancingType)[keyof typeof LoadBalancingType]
+
+
+export const WebhookEvent = {
+  API_CREATED: 'API_CREATED',
+  API_UPDATED: 'API_UPDATED',
+  API_DELETED: 'API_DELETED',
+  ENDPOINT_CREATED: 'ENDPOINT_CREATED',
+  ENDPOINT_UPDATED: 'ENDPOINT_UPDATED',
+  ENDPOINT_DELETED: 'ENDPOINT_DELETED',
+  KEY_CREATED: 'KEY_CREATED',
+  KEY_DELETED: 'KEY_DELETED',
+  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+  API_ERROR: 'API_ERROR',
+  HEALTH_CHECK_FAILED: 'HEALTH_CHECK_FAILED'
+} as const
+
+export type WebhookEvent = (typeof WebhookEvent)[keyof typeof WebhookEvent]
+
+
+export const AlertType = {
+  HIGH_ERROR_RATE: 'HIGH_ERROR_RATE',
+  HIGH_RESPONSE_TIME: 'HIGH_RESPONSE_TIME',
+  HIGH_TRAFFIC: 'HIGH_TRAFFIC',
+  LOW_TRAFFIC: 'LOW_TRAFFIC',
+  API_DOWN: 'API_DOWN',
+  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+  SECURITY_BREACH: 'SECURITY_BREACH',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type AlertType = (typeof AlertType)[keyof typeof AlertType]
+
+
+export const NotificationType = {
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  WEBHOOK: 'WEBHOOK',
+  SLACK: 'SLACK',
+  DISCORD: 'DISCORD',
+  TEAMS: 'TEAMS'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const HealthCheckStatus = {
+  HEALTHY: 'HEALTHY',
+  UNHEALTHY: 'UNHEALTHY',
+  TIMEOUT: 'TIMEOUT',
+  ERROR: 'ERROR'
+} as const
+
+export type HealthCheckStatus = (typeof HealthCheckStatus)[keyof typeof HealthCheckStatus]
+
+
+export const SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const RateLimitWindow = {
+  FIXED: 'FIXED',
+  SLIDING: 'SLIDING'
+} as const
+
+export type RateLimitWindow = (typeof RateLimitWindow)[keyof typeof RateLimitWindow]
+
+
+export const SecurityPolicyType = {
+  IP_WHITELIST: 'IP_WHITELIST',
+  IP_BLACKLIST: 'IP_BLACKLIST',
+  CORS: 'CORS',
+  CSRF_PROTECTION: 'CSRF_PROTECTION',
+  JWT_VALIDATION: 'JWT_VALIDATION',
+  OAUTH_VALIDATION: 'OAUTH_VALIDATION',
+  CUSTOM_HEADER: 'CUSTOM_HEADER',
+  REQUEST_SIZE_LIMIT: 'REQUEST_SIZE_LIMIT',
+  CONTENT_TYPE_VALIDATION: 'CONTENT_TYPE_VALIDATION'
+} as const
+
+export type SecurityPolicyType = (typeof SecurityPolicyType)[keyof typeof SecurityPolicyType]
