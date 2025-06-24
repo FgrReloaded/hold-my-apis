@@ -7,7 +7,117 @@
 *
 * 🟢 You can import this file directly.
 */
+export const Plan = {
+  FREE: 'FREE',
+  STARTER: 'STARTER',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE'
+} as const
+
+export type Plan = (typeof Plan)[keyof typeof Plan]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const Status = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type Status = (typeof Status)[keyof typeof Status]
+
+
+export const OrganizationRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER',
+  VIEWER: 'VIEWER'
+} as const
+
+export type OrganizationRole = (typeof OrganizationRole)[keyof typeof OrganizationRole]
+
+
+export const MemberStatus = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type MemberStatus = (typeof MemberStatus)[keyof typeof MemberStatus]
+
+
+export const ApiStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  MAINTENANCE: 'MAINTENANCE',
+  DEPRECATED: 'DEPRECATED'
+} as const
+
+export type ApiStatus = (typeof ApiStatus)[keyof typeof ApiStatus]
+
+
+export const AuthType = {
+  API_KEY: 'API_KEY',
+  BEARER_TOKEN: 'BEARER_TOKEN',
+  BASIC_AUTH: 'BASIC_AUTH',
+  OAUTH2: 'OAUTH2'
+} as const
+
+export type AuthType = (typeof AuthType)[keyof typeof AuthType]
+
+
+export const HttpMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+  HEAD: 'HEAD',
+  OPTIONS: 'OPTIONS'
+} as const
+
+export type HttpMethod = (typeof HttpMethod)[keyof typeof HttpMethod]
+
+
+export const AnalyticsPeriod = {
+  HOUR: 'HOUR',
+  DAY: 'DAY',
+  WEEK: 'WEEK',
+  MONTH: 'MONTH'
+} as const
+
+export type AnalyticsPeriod = (typeof AnalyticsPeriod)[keyof typeof AnalyticsPeriod]
+
+
+export const SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
+  CANCELED: 'CANCELED',
+  INCOMPLETE: 'INCOMPLETE',
+  INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED',
+  TRIALING: 'TRIALING',
+  UNPAID: 'UNPAID'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const AlertType = {
+  HIGH_ERROR_RATE: 'HIGH_ERROR_RATE',
+  HIGH_RESPONSE_TIME: 'HIGH_RESPONSE_TIME',
+  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+  API_DOWN: 'API_DOWN',
+  UNUSUAL_TRAFFIC: 'UNUSUAL_TRAFFIC',
+  QUOTA_EXCEEDED: 'QUOTA_EXCEEDED'
+} as const
+
+export type AlertType = (typeof AlertType)[keyof typeof AlertType]
+
+
+export const AlertSeverity = {
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR',
+  CRITICAL: 'CRITICAL'
+} as const
+
+export type AlertSeverity = (typeof AlertSeverity)[keyof typeof AlertSeverity]

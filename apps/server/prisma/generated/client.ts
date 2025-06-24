@@ -61,5 +61,86 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Organization
+ * 
+ */
+export type Organization = Prisma.OrganizationModel
+/**
+ * Model OrganizationMember
+ * 
+ */
+export type OrganizationMember = Prisma.OrganizationMemberModel
+/**
+ * Model Api
+ * 
+ */
+export type Api = Prisma.ApiModel
+/**
+ * Model Endpoint
+ * 
+ */
+export type Endpoint = Prisma.EndpointModel
+/**
+ * Model ApiKey
+ * 
+ */
+export type ApiKey = Prisma.ApiKeyModel
+/**
+ * Model Request
+ * 
+ */
+export type Request = Prisma.RequestModel
+/**
+ * Model Analytics
+ * 
+ */
+export type Analytics = Prisma.AnalyticsModel
+/**
+ * Model Usage
+ * 
+ */
+export type Usage = Prisma.UsageModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model Alert
+ * 
+ */
+export type Alert = Prisma.AlertModel
 
+export type Plan = $Enums.Plan
+export const Plan = $Enums.Plan
 
+export type Status = $Enums.Status
+export const Status = $Enums.Status
+
+export type OrganizationRole = $Enums.OrganizationRole
+export const OrganizationRole = $Enums.OrganizationRole
+
+export type MemberStatus = $Enums.MemberStatus
+export const MemberStatus = $Enums.MemberStatus
+
+export type ApiStatus = $Enums.ApiStatus
+export const ApiStatus = $Enums.ApiStatus
+
+export type AuthType = $Enums.AuthType
+export const AuthType = $Enums.AuthType
+
+export type HttpMethod = $Enums.HttpMethod
+export const HttpMethod = $Enums.HttpMethod
+
+export type AnalyticsPeriod = $Enums.AnalyticsPeriod
+export const AnalyticsPeriod = $Enums.AnalyticsPeriod
+
+export type SubscriptionStatus = $Enums.SubscriptionStatus
+export const SubscriptionStatus = $Enums.SubscriptionStatus
+
+export type AlertType = $Enums.AlertType
+export const AlertType = $Enums.AlertType
+
+export type AlertSeverity = $Enums.AlertSeverity
+export const AlertSeverity = $Enums.AlertSeverity
