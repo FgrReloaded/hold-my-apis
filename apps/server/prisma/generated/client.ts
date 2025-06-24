@@ -26,8 +26,8 @@ export * as $Enums from './enums'
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Organizations
- * const organizations = await prisma.organization.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
@@ -41,31 +41,6 @@ export { Prisma }
 path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node")
 path.join(process.cwd(), "prisma/generated/libquery_engine-debian-openssl-1.1.x.so.node")
 
-/**
- * Model Organization
- * 
- */
-export type Organization = Prisma.OrganizationModel
-/**
- * Model OrganizationMember
- * 
- */
-export type OrganizationMember = Prisma.OrganizationMemberModel
-/**
- * Model Api
- * 
- */
-export type Api = Prisma.ApiModel
-/**
- * Model ApiVersion
- * 
- */
-export type ApiVersion = Prisma.ApiVersionModel
-/**
- * Model Endpoint
- * 
- */
-export type Endpoint = Prisma.EndpointModel
 /**
  * Model User
  * 
@@ -86,127 +61,5 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
-/**
- * Model ApiDocumentation
- * 
- */
-export type ApiDocumentation = Prisma.ApiDocumentationModel
-/**
- * Model Gateway
- * 
- */
-export type Gateway = Prisma.GatewayModel
-/**
- * Model GatewayRoute
- * 
- */
-export type GatewayRoute = Prisma.GatewayRouteModel
-/**
- * Model Webhook
- * 
- */
-export type Webhook = Prisma.WebhookModel
-/**
- * Model WebhookDelivery
- * 
- */
-export type WebhookDelivery = Prisma.WebhookDeliveryModel
-/**
- * Model Cache
- * 
- */
-export type Cache = Prisma.CacheModel
-/**
- * Model ApiLog
- * 
- */
-export type ApiLog = Prisma.ApiLogModel
-/**
- * Model ApiMetrics
- * 
- */
-export type ApiMetrics = Prisma.ApiMetricsModel
-/**
- * Model Alert
- * 
- */
-export type Alert = Prisma.AlertModel
-/**
- * Model AlertNotification
- * 
- */
-export type AlertNotification = Prisma.AlertNotificationModel
-/**
- * Model HealthCheck
- * 
- */
-export type HealthCheck = Prisma.HealthCheckModel
-/**
- * Model HealthCheckResult
- * 
- */
-export type HealthCheckResult = Prisma.HealthCheckResultModel
-/**
- * Model ApiKey
- * 
- */
-export type ApiKey = Prisma.ApiKeyModel
-/**
- * Model ApiSubscription
- * 
- */
-export type ApiSubscription = Prisma.ApiSubscriptionModel
-/**
- * Model RateLimit
- * 
- */
-export type RateLimit = Prisma.RateLimitModel
-/**
- * Model EndpointRateLimit
- * 
- */
-export type EndpointRateLimit = Prisma.EndpointRateLimitModel
-/**
- * Model SecurityPolicy
- * 
- */
-export type SecurityPolicy = Prisma.SecurityPolicyModel
 
-export type OrganizationRole = $Enums.OrganizationRole
-export const OrganizationRole = $Enums.OrganizationRole
 
-export type ApiStatus = $Enums.ApiStatus
-export const ApiStatus = $Enums.ApiStatus
-
-export type ApiVisibility = $Enums.ApiVisibility
-export const ApiVisibility = $Enums.ApiVisibility
-
-export type HttpMethod = $Enums.HttpMethod
-export const HttpMethod = $Enums.HttpMethod
-
-export type DocumentationType = $Enums.DocumentationType
-export const DocumentationType = $Enums.DocumentationType
-
-export type LoadBalancingType = $Enums.LoadBalancingType
-export const LoadBalancingType = $Enums.LoadBalancingType
-
-export type WebhookEvent = $Enums.WebhookEvent
-export const WebhookEvent = $Enums.WebhookEvent
-
-export type AlertType = $Enums.AlertType
-export const AlertType = $Enums.AlertType
-
-export type NotificationType = $Enums.NotificationType
-export const NotificationType = $Enums.NotificationType
-
-export type HealthCheckStatus = $Enums.HealthCheckStatus
-export const HealthCheckStatus = $Enums.HealthCheckStatus
-
-export type SubscriptionStatus = $Enums.SubscriptionStatus
-export const SubscriptionStatus = $Enums.SubscriptionStatus
-
-export type RateLimitWindow = $Enums.RateLimitWindow
-export const RateLimitWindow = $Enums.RateLimitWindow
-
-export type SecurityPolicyType = $Enums.SecurityPolicyType
-export const SecurityPolicyType = $Enums.SecurityPolicyType

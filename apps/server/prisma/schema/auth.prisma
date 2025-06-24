@@ -12,11 +12,6 @@ model User {
   banExpires         DateTime?
   sessions           Session[]
   accounts           Account[]
-  OrganizationMember OrganizationMember[]
-  Api                Api[]
-  ApiDocumentation   ApiDocumentation[]
-  Alert              Alert[]
-  ApiKey             ApiKey[]
 
   @@unique([email])
   @@map("user")
