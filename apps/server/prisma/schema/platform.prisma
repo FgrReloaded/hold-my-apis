@@ -1,0 +1,369 @@
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  website     String?
+  logo        String?
+  plan        Plan     @default(FREE)
+  status      Status   @default(ACTIVE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members       OrganizationMember[]
+  apis          Api[]
+  apiKeys       ApiKey[]
+  subscriptions Subscription[]
+  usage         Usage[]
+  alerts        Alert[]
+
+  @@map("organization")
+}
+
+model OrganizationMember {
+  id             String           @id @default(cuid())
+  userId         String
+  organizationId String
+  role           OrganizationRole @default(MEMBER)
+  permissions    Json
+  invitedAt      DateTime         @default(now())
+  joinedAt       DateTime?
+  status         MemberStatus     @default(INVITED)
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@map("organization_member")
+}
+
+model Api {
+  id             String    @id @default(cuid())
+  name           String
+  description    String?
+  originalUrl    String // Original API URL (e.g., https://api.shopcorp.com)
+  proxyUrl       String    @unique // Proxy URL (e.g., https://shopcorp.holdmyapis.com)
+  customDomain   String? // Optional custom domain
+  version        String?
+  status         ApiStatus @default(ACTIVE)
+  organizationId String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Configuration
+  rateLimitRpm Int? // Requests per minute
+  rateLimitRph Int? // Requests per hour
+  rateLimitRpd Int? // Requests per day
+  enableCors   Boolean   @default(true)
+  enableAuth   Boolean   @default(false)
+  authType     AuthType?
+
+  // Documentation
+  openApiSpec   String? // JSON OpenAPI specification
+  documentation String? // Markdown documentation
+
+  // Relationships
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  endpoints    Endpoint[]
+  requests     Request[]
+  apiKeys      ApiKey[]
+  analytics    Analytics[]
+  alerts       Alert[]
+
+  @@map("api")
+}
+
+// API Endpoints - Individual endpoints within an API
+model Endpoint {
+  id          String     @id @default(cuid())
+  apiId       String
+  path        String // e.g., /v1/products
+  method      HttpMethod
+  description String?
+  isActive    Boolean    @default(true)
+
+  // Rate limiting (can override API-level settings)
+  rateLimitRpm Int?
+  rateLimitRph Int?
+  rateLimitRpd Int?
+
+  // Authentication requirements
+  requiresAuth Boolean @default(false)
+  permissions  Json // JSON array of required permissions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  api      Api       @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  requests Request[]
+
+  @@unique([apiId, path, method])
+  @@map("endpoint")
+}
+
+// API Keys - For accessing the platform APIs (not the proxied APIs)
+model ApiKey {
+  id             String    @id @default(cuid())
+  name           String
+  key            String    @unique
+  secret         String // Hashed
+  organizationId String
+  apiId          String? // Optional: scoped to specific API
+  permissions    Json // JSON array of permissions
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relationships
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  api          Api?         @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  requests     Request[]
+
+  @@map("api_key")
+}
+
+// Request Logs - All requests through the proxy
+model Request {
+  id         String  @id @default(cuid())
+  apiId      String
+  endpointId String?
+  apiKeyId   String?
+
+  // Request details
+  method    HttpMethod
+  path      String
+  query     String? // Query parameters
+  headers   Json? // Request headers
+  body      String? // Request body (if needed for analytics)
+  userAgent String?
+  ipAddress String
+
+  // Response details
+  statusCode   Int
+  responseTime Int // Response time in milliseconds
+  responseSize Int? // Response size in bytes
+
+  // Metadata
+  timestamp DateTime @default(now())
+  country   String? // Derived from IP
+  region    String? // Derived from IP
+
+  // Error tracking
+  errorMessage String?
+  errorCode    String?
+
+  // Relationships
+  api      Api       @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  endpoint Endpoint? @relation(fields: [endpointId], references: [id], onDelete: SetNull)
+  apiKey   ApiKey?   @relation(fields: [apiKeyId], references: [id], onDelete: SetNull)
+
+  @@index([apiId, timestamp])
+  @@index([timestamp])
+  @@index([ipAddress])
+  @@map("request")
+}
+
+// Analytics - Aggregated analytics data
+model Analytics {
+  id     String          @id @default(cuid())
+  apiId  String
+  date   DateTime // Date for this analytics record
+  period AnalyticsPeriod // HOUR, DAY, WEEK, MONTH
+
+  // Metrics
+  totalRequests   Int    @default(0)
+  successRequests Int    @default(0)
+  errorRequests   Int    @default(0)
+  avgResponseTime Float  @default(0)
+  totalBandwidth  BigInt @default(0)
+  uniqueIps       Int    @default(0)
+
+  // Top endpoints/countries/status codes (JSON)
+  topEndpoints Json?
+  topCountries Json?
+  statusCodes  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
+
+  @@unique([apiId, date, period])
+  @@map("analytics")
+}
+
+// Usage tracking for billing
+model Usage {
+  id             String   @id @default(cuid())
+  organizationId String
+  month          DateTime // First day of the month
+
+  // Usage metrics
+  totalRequests  BigInt @default(0)
+  totalBandwidth BigInt @default(0)
+  totalApis      Int    @default(0)
+
+  // Billing
+  cost     Float? // Cost in dollars (cents would be Int)
+  billedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, month])
+  @@map("usage")
+}
+
+// Subscriptions for billing
+model Subscription {
+  id             String             @id @default(cuid())
+  organizationId String
+  plan           Plan
+  status         SubscriptionStatus @default(ACTIVE)
+
+  // Stripe/billing info
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  stripePriceId        String?
+
+  // Billing
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean   @default(false)
+  canceledAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId])
+  @@map("subscription")
+}
+
+// Alerts and notifications
+model Alert {
+  id             String  @id @default(cuid())
+  organizationId String
+  apiId          String? // Optional: scoped to specific API
+
+  type     AlertType
+  title    String
+  message  String
+  severity AlertSeverity @default(INFO)
+
+  // Alert conditions
+  condition Json // JSON object defining the alert condition
+  threshold Float?
+
+  // Status
+  isActive    Boolean   @default(true)
+  triggered   Boolean   @default(false)
+  triggeredAt DateTime?
+  resolvedAt  DateTime?
+
+  // Notification settings
+  emailEnabled Boolean @default(true)
+  webhookUrl   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  api          Api?         @relation(fields: [apiId], references: [id], onDelete: Cascade)
+
+  @@map("alert")
+}
+
+// Enums
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum MemberStatus {
+  INVITED
+  ACTIVE
+  INACTIVE
+}
+
+enum ApiStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  DEPRECATED
+}
+
+enum AuthType {
+  API_KEY
+  BEARER_TOKEN
+  BASIC_AUTH
+  OAUTH2
+}
+
+enum HttpMethod {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+  HEAD
+  OPTIONS
+}
+
+enum AnalyticsPeriod {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  UNPAID
+}
+
+enum AlertType {
+  HIGH_ERROR_RATE
+  HIGH_RESPONSE_TIME
+  RATE_LIMIT_EXCEEDED
+  API_DOWN
+  UNUSUAL_TRAFFIC
+  QUOTA_EXCEEDED
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}

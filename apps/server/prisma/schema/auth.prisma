@@ -13,6 +13,8 @@ model User {
   sessions           Session[]
   accounts           Account[]
 
+  organizations      OrganizationMember[]
+
   @@unique([email])
   @@map("user")
 }
