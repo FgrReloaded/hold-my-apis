@@ -38,6 +38,13 @@
     "apps/web": {
       "name": "web",
       "dependencies": {
+        "@radix-ui/react-avatar": "^1.1.10",
+        "@radix-ui/react-collapsible": "^1.1.11",
+        "@radix-ui/react-dialog": "^1.1.14",
+        "@radix-ui/react-dropdown-menu": "^2.1.15",
+        "@radix-ui/react-separator": "^1.1.7",
+        "@radix-ui/react-slot": "^1.2.3",
+        "@radix-ui/react-tooltip": "^1.2.7",
         "@react-router/fs-routes": "^7.6.1",
         "@react-router/node": "^7.6.1",
         "@react-router/serve": "^7.6.1",
@@ -50,7 +57,7 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "isbot": "^5.1.28",
-        "lucide-react": "^0.511.0",
+        "lucide-react": "^0.522.0",
         "next-themes": "^0.4.6",
         "radix-ui": "^1.4.2",
         "react": "19.0.0",
@@ -1332,7 +1339,7 @@
 
     "lru-cache": ["lru-cache@10.4.3", "", {}, "sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ=="],
 
-    "lucide-react": ["lucide-react@0.511.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-VK5a2ydJ7xm8GvBeKLS9mu1pVK6ucef9780JVUjw6bAjJL/QXnd4Y0p7SPeOUMC27YhzNCZvm5d/QX0Tp3rc0w=="],
+    "lucide-react": ["lucide-react@0.522.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-jnJbw974yZ7rQHHEFKJOlWAefG3ATSCZHANZxIdx8Rk/16siuwjgA4fBULpXEAWx/RlTs3FzmKW/udWUuO0aRw=="],
 
     "magic-string": ["magic-string@0.30.17", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0" } }, "sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA=="],
 
