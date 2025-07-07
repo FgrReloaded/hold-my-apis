@@ -1,6 +1,5 @@
 import prisma from "../../prisma";
 import { OrganizationRole, MemberStatus } from "../../prisma/generated/client";
-import { TRPCError } from "@trpc/server";
 
 export class OrganizationService {
   static async createOrganization(data: {
@@ -13,14 +12,13 @@ export class OrganizationService {
     try {
       // Check if slug is already taken
       const existingOrg = await prisma.organization.findUnique({
-        where: { slug: data.slug }
+        where: { slug: data.slug },
       });
 
       if (existingOrg) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "Organization slug already exists"
-        });
+        const error = new Error("Organization slug already exists");
+        error.code = "CONFLICT";
+        throw error;
       }
 
       // Create organization with owner membership
@@ -40,45 +38,55 @@ export class OrganizationService {
                 canManageMembers: true,
                 canManageApis: true,
                 canManageBilling: true,
-                canViewAnalytics: true
-              }
-            }
-          }
+                canViewAnalytics: true,
+              },
+            },
+          },
         },
         include: {
           members: {
             include: {
-              user: true
-            }
-          }
-        }
+              user: true,
+            },
+          },
+        },
       });
 
       return organization;
     } catch (error) {
-      if (error instanceof TRPCError) {
+      if (error.code === "CONFLICT") {
         throw error;
       }
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to create organization"
-      });
+      const serverError = new Error("Failed to create organization");
+      serverError.code = "INTERNAL_SERVER_ERROR";
+      throw serverError;
     }
   }
 
   static async getUserOrganizations(userId: string) {
-    return prisma.organizationMember.findMany({
+    const memberships = await prisma.organizationMember.findMany({
       where: {
         userId,
-        status: MemberStatus.ACTIVE
+        status: MemberStatus.ACTIVE,
       },
       include: {
-        organization: true
+        organization: {
+          include: {
+            _count: {
+              select: {
+                apis: true,
+                members: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        joinedAt: 'desc'
-      }
+        joinedAt: "desc",
+      },
     });
+
+    return memberships.map((membership) => membership.organization);
   }
 
   static async getOrganizationById(organizationId: string, userId: string) {
@@ -86,33 +94,32 @@ export class OrganizationService {
       where: {
         organizationId,
         userId,
-        status: MemberStatus.ACTIVE
+        status: MemberStatus.ACTIVE,
       },
       include: {
         organization: {
           include: {
             members: {
               include: {
-                user: true
-              }
+                user: true,
+              },
             },
             apis: true,
             _count: {
               select: {
                 apis: true,
-                members: true
-              }
-            }
-          }
-        }
-      }
+                members: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!membership) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Organization not found or access denied"
-      });
+      const error = new Error("Organization not found or access denied");
+      error.code = "NOT_FOUND";
+      throw error;
     }
 
     return membership.organization;
@@ -134,16 +141,17 @@ export class OrganizationService {
         userId,
         status: MemberStatus.ACTIVE,
         role: {
-          in: [OrganizationRole.OWNER, OrganizationRole.ADMIN]
-        }
-      }
+          in: [OrganizationRole.OWNER, OrganizationRole.ADMIN],
+        },
+      },
     });
 
     if (!membership) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Insufficient permissions to update organization"
-      });
+      const error = new Error(
+        "Insufficient permissions to update organization"
+      );
+      error.code = "FORBIDDEN";
+      throw error;
     }
 
     return prisma.organization.update({
@@ -152,27 +160,26 @@ export class OrganizationService {
       include: {
         members: {
           include: {
-            user: true
-          }
-        }
-      }
+            user: true,
+          },
+        },
+      },
     });
   }
 
   static async checkSlugAvailability(slug: string) {
-    const existing = await prisma.organization.findUnique({
-      where: { slug }
+    const existingOrg = await prisma.organization.findUnique({
+      where: { slug },
     });
-    return !existing;
+    return !existingOrg;
   }
 
   static async generateSlugFromName(name: string) {
     const baseSlug = name
       .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
+      .replace(/[^a-z0-9]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
 
     let slug = baseSlug;
     let counter = 1;

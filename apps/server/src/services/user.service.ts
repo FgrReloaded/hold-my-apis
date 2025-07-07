@@ -1,5 +1,4 @@
 import prisma from "../../prisma";
-import { TRPCError } from "@trpc/server";
 
 export class UserService {
   static async getUserProfile(userId: string) {
@@ -8,39 +7,41 @@ export class UserService {
       include: {
         organizations: {
           include: {
-            organization: true
+            organization: true,
           },
           orderBy: {
-            joinedAt: 'desc'
-          }
-        }
-      }
+            joinedAt: "desc",
+          },
+        },
+      },
     });
 
     if (!user) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User not found"
-      });
+      const error = new Error("User not found");
+      error.code = "NOT_FOUND";
+      throw error;
     }
 
     return user;
   }
 
-  static async updateUserProfile(userId: string, data: {
-    name?: string;
-    image?: string;
-  }) {
+  static async updateUserProfile(
+    userId: string,
+    data: {
+      name?: string;
+      image?: string;
+    }
+  ) {
     return prisma.user.update({
       where: { id: userId },
       data,
       include: {
         organizations: {
           include: {
-            organization: true
-          }
-        }
-      }
+            organization: true,
+          },
+        },
+      },
     });
   }
 
@@ -48,8 +49,8 @@ export class UserService {
     const organizationCount = await prisma.organizationMember.count({
       where: {
         userId,
-        status: "ACTIVE"
-      }
+        status: "ACTIVE",
+      },
     });
 
     return organizationCount > 0;

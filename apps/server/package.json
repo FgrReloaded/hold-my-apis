@@ -19,8 +19,6 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "zod": "^3.25.16",
-    "@trpc/server": "^11.0.0",
-    "@trpc/client": "^11.0.0",
     "fastify": "^5.3.3",
     "@fastify/cors": "^11.0.1",
     "@prisma/client": "^6.9.0",
